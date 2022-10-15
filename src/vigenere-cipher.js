@@ -20,13 +20,55 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(modification = true) {
+    this.modification = modification;
+    this.alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+  encrypt(message, key) {
+    if (!message || !key) throw new Error('Incorrect arguments!');
+
+    message = message.toUpperCase();
+    key = key.toUpperCase();
+    const code = [];
+    let count = 0;
+    let messageElIndex;
+    let keyElIndex;
+
+    for (let i = 0; i < message.length; i++) { // a
+      messageElIndex = this.alphabet.indexOf(message[i]); //0
+      if (messageElIndex === -1) {
+        code.push(message[i]);
+        continue;
+      }
+      keyElIndex = this.alphabet.indexOf(key[count % key.length]);
+      code.push(this.alphabet[(messageElIndex + keyElIndex) % 26]);
+      count++;
+    }
+
+    return this.modification ? code.join('') : code.reverse().join('');
+  }
+
+  decrypt(message, key) {
+    if (!message || !key) throw new Error('Incorrect arguments!');
+    [message, key] = [message.toUpperCase(), key.toUpperCase()];
+
+    const code = [];
+    let count = 0;
+    let messageElIndex;
+    let keyElIndex;
+
+    for (let i = 0; i < message.length; i++) {
+      messageElIndex = this.alphabet.indexOf(message[i]); //0
+      if (messageElIndex === -1) {
+        code.push(message[i]);
+        continue;
+      }
+      keyElIndex = this.alphabet.indexOf(key[count % key.length]);
+      code.push(this.alphabet[(messageElIndex - keyElIndex + 26) % 26]);
+      count++;
+    }
+    return this.modification ? code.join('') : code.reverse().join('');
   }
 }
 
