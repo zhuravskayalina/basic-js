@@ -23,9 +23,36 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+
+function minesweeper(matrix) {
+  const sweeper = new Array(matrix.length).fill(0).map((el) => new Array(matrix[0].length).fill(0));
+
+  for (let i = 0; i < matrix.length; i++) {
+
+    for (let j = 0; j < matrix[i].length; j++) {
+      const currentEl = matrix[i][j];
+
+      if (currentEl) { // если currentEl === true
+        if (sweeper[i - 1]) {
+          if (sweeper[i - 1][j - 1] >= 0) sweeper[i - 1][j - 1]++; //если существует элемент вверху слева по диагонали
+          if (sweeper[i - 1][j] >= 0) sweeper[i - 1][j]++; //если существует элемент сверху
+          if (sweeper[i - 1][j + 1] >= 0) sweeper[i - 1][j + 1]++; //если существует элемент сверху справа по диагонали
+        }
+
+        if (sweeper[i]) {
+          if (sweeper[i][j + 1] >= 0) sweeper[i][j + 1]++;//если существует элемент справа
+          if (sweeper[i][j - 1] >= 0) sweeper[i][j - 1]++;// если существует элемент слева
+        }
+
+        if (sweeper[i + 1]) {
+          if (sweeper[i + 1][j + 1] >= 0) sweeper[i + 1][j + 1]++; //если существует элемент справа внизу по диагонали
+          if (sweeper[i + 1][j] >= 0) sweeper[i + 1][j]++; //если существует элемент снизу
+          if (sweeper[i + 1][j - 1] >= 0) sweeper[i + 1][j - 1]++; //если существует элемент внизу слева по диагонали
+        }
+      }
+    }
+  }
+  return sweeper;
 }
 
 module.exports = {
